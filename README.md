@@ -1,3 +1,14 @@
+# Alura Challenge Backend - Financial Control
+
+## About
+
+This project is from the [Alura Challenge Backend](https://www.alura.com.br/challenges/back-end-4).
+
+<br/>
+<br/>
+
+## Nestjs starter README things
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
