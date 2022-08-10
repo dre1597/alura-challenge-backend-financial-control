@@ -1,8 +1,8 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
 import { PrismaPromise, Revenues } from '@prisma/client';
-import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from 'src/utils';
 
 import { PrismaService } from '../prisma/prisma.service';
+import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../utils';
 import { AddRevenueDto } from './dto';
 
 @Injectable()
@@ -67,5 +67,12 @@ export class RevenuesService {
     });
 
     return dateFound ? false : true;
+  }
+
+  listOneRevenue(id: string): PrismaPromise<Revenues> {
+    this._logger.debug(`Searching for a revenue with id ${id} `);
+    return this.prisma.revenues.findUnique({
+      where: { id },
+    });
   }
 }
