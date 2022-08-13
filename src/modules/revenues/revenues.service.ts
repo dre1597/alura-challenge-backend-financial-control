@@ -1,8 +1,8 @@
 import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaPromise, Revenues } from '@prisma/client';
 
-import { PrismaService } from '../prisma/prisma.service';
-import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../utils';
+import { PrismaService } from '../../orm/prisma/prisma.service';
+import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
 import { AddRevenueDto, UpdateRevenueDto } from './dto';
 
 @Injectable()
