@@ -68,7 +68,7 @@ export class RevenuesService {
   }
 
   async listOneRevenue(id: string): Promise<Revenues> {
-    this._logger.debug(`Searching for a revenue with id ${id} `);
+    this._logger.debug(`Searching for a revenue with id ${id}`);
     const revenue = await this.prisma.revenues.findUnique({
       where: { id },
     });
@@ -107,6 +107,8 @@ export class RevenuesService {
       }
     }
 
+    this._logger.debug(`Updating a revenue with id ${id}`);
+
     await this.prisma.revenues.update({
       where: {
         id,
@@ -134,6 +136,8 @@ export class RevenuesService {
       this._logger.error(`Revenue ${id} not found.`);
       throw new NotFoundException('Revenue not found.');
     }
+
+    this._logger.debug(`Deleting a revenue with id ${id}`);
 
     await this.prisma.revenues.delete({
       where: {
