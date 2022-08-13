@@ -67,7 +67,7 @@ export class RevenuesService {
     const firstDayOfTheMonth = getFirstDayOfMonth(date);
     const lastDayOfTheMonth = getLastDayOfMonth(date);
 
-    const dateFound = await this.prisma.revenues.findFirst({
+    const revenueFound = await this.prisma.revenues.findFirst({
       where: {
         description,
         date: {
@@ -77,7 +77,7 @@ export class RevenuesService {
       },
     });
 
-    return dateFound ? false : true;
+    return revenueFound ? false : true;
   }
 
   async listOneRevenue(id: string): Promise<Revenues> {

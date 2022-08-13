@@ -70,7 +70,7 @@ export class ExpensesService {
     const firstDayOfTheMonth = getFirstDayOfMonth(date);
     const lastDayOfTheMonth = getLastDayOfMonth(date);
 
-    const dateFound = await this.prisma.expenses.findFirst({
+    const expenseFund = await this.prisma.expenses.findFirst({
       where: {
         description,
         date: {
@@ -80,7 +80,7 @@ export class ExpensesService {
       },
     });
 
-    return dateFound ? false : true;
+    return expenseFund ? false : true;
   }
 
   async listOneExpense(id: string): Promise<Expenses> {
