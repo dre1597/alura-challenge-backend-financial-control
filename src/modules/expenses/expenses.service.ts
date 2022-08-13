@@ -122,4 +122,29 @@ export class ExpensesService {
 
     this._logger.log(`A expense with id ${id} was updated.`);
   }
+
+  async deleteExpense(id: string): Promise<void> {
+    this._logger.debug(`Searching for a expense with id ${id} `);
+
+    const expenseFound = await this.prisma.expenses.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!expenseFound) {
+      this._logger.error(`Expense ${id} not found.`);
+      throw new NotFoundException('Expense not found.');
+    }
+
+    this._logger.debug(`Deleting a expense with id ${id}`);
+
+    await this.prisma.expenses.delete({
+      where: {
+        id,
+      },
+    });
+
+    this._logger.log(`A expense with id ${id} was deleted.`);
+  }
 }
