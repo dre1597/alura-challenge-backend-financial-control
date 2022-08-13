@@ -16,7 +16,7 @@ export class RevenuesService {
     return this.prisma.revenues.findMany();
   }
 
-  async addRevenue(revenueData: AddRevenueDto): Promise<Revenues> {
+  async addRevenue(revenueData: AddRevenueDto): Promise<void> {
     const { description, date, value } = revenueData;
 
     this._logger.debug(`Checking if the description is valid.`);
@@ -37,8 +37,6 @@ export class RevenuesService {
     });
 
     this._logger.log(`A revenue with id ${revenue.id} was added.`);
-
-    return revenue;
   }
 
   private async _validateDescription(description: string, date: string): Promise<boolean> {
@@ -83,7 +81,7 @@ export class RevenuesService {
     return revenue;
   }
 
-  async updateRevenue(id: string, revenueData: UpdateRevenueDto): Promise<Revenues> {
+  async updateRevenue(id: string, revenueData: UpdateRevenueDto): Promise<void> {
     const { description, date, value } = revenueData;
 
     this._logger.debug(`Searching for a revenue with id ${id} `);
@@ -109,7 +107,7 @@ export class RevenuesService {
       }
     }
 
-    return this.prisma.revenues.update({
+    await this.prisma.revenues.update({
       where: {
         id,
       },
@@ -119,5 +117,7 @@ export class RevenuesService {
         date,
       },
     });
+
+    this._logger.log(`A revenue with id ${id} was updated.`);
   }
 }

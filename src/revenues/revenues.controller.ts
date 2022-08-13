@@ -15,7 +15,7 @@ export class RevenuesController {
   }
 
   @Post()
-  addRevenue(@Body() revenueData: AddRevenueDto): Promise<Revenues> {
+  addRevenue(@Body() revenueData: AddRevenueDto): Promise<void> {
     return this.revenuesService.addRevenue(revenueData);
   }
 
@@ -27,7 +27,7 @@ export class RevenuesController {
   }
 
   @Patch(':id')
-  updateRevenue(@Param('id') id: string, @Body() revenueData: UpdateRevenueDto): Promise<Revenues> {
+  updateRevenue(@Param('id') id: string, @Body() revenueData: UpdateRevenueDto): Promise<void> {
     return this.revenuesService.updateRevenue(id, revenueData);
   }
 }
