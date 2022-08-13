@@ -3,6 +3,7 @@ import { Expenses, PrismaPromise } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
+import { Month } from '../../utils/enum';
 import { AddExpenseDto, FindExpensesDto, UpdateExpenseDto } from './dto';
 import { Category } from './enum';
 
@@ -161,5 +162,20 @@ export class ExpensesService {
     });
 
     this._logger.log(`A expense with id ${id} was deleted.`);
+  }
+
+  listAllExpensesByMonth(year: number, month: Month): PrismaPromise<Expenses[]> {
+    const firstDayOfTheMonth = new Date(year, +Month[month]);
+
+    const firstDayOfTheNextMonth = new Date(year, +Month[month] + 1);
+
+    return this.prisma.expenses.findMany({
+      where: {
+        date: {
+          lte: firstDayOfTheNextMonth,
+          gte: firstDayOfTheMonth,
+        },
+      },
+    });
   }
 }

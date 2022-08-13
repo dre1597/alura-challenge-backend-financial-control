@@ -1,5 +1,17 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseEnumPipe,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Expenses, PrismaPromise } from '@prisma/client';
+import { Month } from 'src/utils/enum';
 
 import { AddExpenseDto, FindExpensesDto, UpdateExpenseDto } from './dto';
 import { ExpensesService } from './expenses.service';
@@ -31,5 +43,13 @@ export class ExpensesController {
   @Delete(':id')
   deleteExpense(@Param('id') id: string): Promise<void> {
     return this.expensesService.deleteExpense(id);
+  }
+
+  @Get(':year/:month')
+  listAllExpensesByMonth(
+    @Param('year', ParseIntPipe) year: number,
+    @Param('month', new ParseEnumPipe(Month)) month: Month,
+  ): PrismaPromise<Expenses[]> {
+    return this.expensesService.listAllExpensesByMonth(year, month);
   }
 }
