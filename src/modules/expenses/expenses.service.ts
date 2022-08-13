@@ -4,6 +4,7 @@ import { Expenses, PrismaPromise } from '@prisma/client';
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
 import { AddExpenseDto, UpdateExpenseDto } from './dto';
+import { Category } from './enum';
 
 @Injectable()
 export class ExpensesService {
@@ -17,7 +18,7 @@ export class ExpensesService {
   }
 
   async addExpense(expenseData: AddExpenseDto): Promise<void> {
-    const { description, date, value } = expenseData;
+    const { description, date, value, category } = expenseData;
 
     this._logger.debug(`Checking if the description is valid.`);
     const isDescriptionValid: boolean = await this._validateDescription(description, date);
@@ -33,6 +34,7 @@ export class ExpensesService {
         description,
         value,
         date: date ? new Date(date) : new Date(),
+        category: category ? category : Category.OTHERS,
       },
     });
 

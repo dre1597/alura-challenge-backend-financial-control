@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Category } from '../enum';
 
 export class AddExpenseDto {
   @IsString()
@@ -18,4 +19,8 @@ export class AddExpenseDto {
   @IsString()
   @IsOptional()
   date?: string;
+
+  @IsEnum(Category)
+  @IsOptional()
+  category?: Category;
 }
