@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Expenses, PrismaPromise } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
@@ -65,5 +65,19 @@ export class ExpensesService {
     });
 
     return dateFound ? false : true;
+  }
+
+  async listOneExpense(id: string): Promise<Expenses> {
+    this._logger.debug(`Searching for a expense with id ${id}`);
+    const expense = await this.prisma.expenses.findUnique({
+      where: { id },
+    });
+
+    if (!expense) {
+      this._logger.error(`Expense ${id} not found.`);
+      throw new NotFoundException('Expense not found.');
+    }
+
+    return expense;
   }
 }

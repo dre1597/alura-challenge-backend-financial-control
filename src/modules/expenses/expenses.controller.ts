@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Expenses, PrismaPromise } from '@prisma/client';
 
 import { AddExpenseDto } from './dto';
@@ -16,5 +16,10 @@ export class ExpensesController {
   @Post()
   addExpense(@Body() expenseData: AddExpenseDto): Promise<void> {
     return this.expensesService.addExpense(expenseData);
+  }
+
+  @Get(':id')
+  listOneExpense(@Param('id') id: string): Promise<Expenses> {
+    return this.expensesService.listOneExpense(id);
   }
 }
