@@ -11,9 +11,9 @@ import {
   Query,
 } from '@nestjs/common';
 import { Expenses, PrismaPromise } from '@prisma/client';
-import { Month } from 'src/utils/enum';
 
-import { AddExpenseDto, FindExpensesDto, UpdateExpenseDto } from './dto';
+import { Month } from '../../utils/enum';
+import { AddExpenseDto, FilterExpensesDto, UpdateExpenseDto } from './dto';
 import { ExpensesService } from './expenses.service';
 
 @Controller('expenses')
@@ -21,8 +21,8 @@ export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Get()
-  listExpenses(@Query() findExpensesDto: FindExpensesDto): PrismaPromise<Expenses[]> {
-    return this.expensesService.listExpenses(findExpensesDto);
+  listExpenses(@Query() filterExpensesDto: FilterExpensesDto): PrismaPromise<Expenses[]> {
+    return this.expensesService.listExpenses(filterExpensesDto);
   }
 
   @Post()
@@ -31,8 +31,8 @@ export class ExpensesController {
   }
 
   @Get(':id')
-  listOneExpense(@Param('id') id: string): Promise<Expenses> {
-    return this.expensesService.listOneExpense(id);
+  getExpense(@Param('id') id: string): Promise<Expenses> {
+    return this.expensesService.getExpense(id);
   }
 
   @Patch(':id')
@@ -46,10 +46,10 @@ export class ExpensesController {
   }
 
   @Get(':year/:month')
-  listAllExpensesByMonth(
+  listExpensesByMonth(
     @Param('year', ParseIntPipe) year: number,
     @Param('month', new ParseEnumPipe(Month)) month: Month,
   ): PrismaPromise<Expenses[]> {
-    return this.expensesService.listAllExpensesByMonth(year, month);
+    return this.expensesService.listExpensesByMonth(year, month);
   }
 }

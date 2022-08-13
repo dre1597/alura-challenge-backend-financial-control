@@ -3,7 +3,7 @@ import { PrismaPromise, Revenues } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
-import { AddRevenueDto, FindRevenuesDto, UpdateRevenueDto } from './dto';
+import { AddRevenueDto, FilterRevenuesDto, UpdateRevenueDto } from './dto';
 
 @Injectable()
 export class RevenuesService {
@@ -11,7 +11,7 @@ export class RevenuesService {
 
   constructor(private prisma: PrismaService) {}
 
-  listRevenues(findRevenuesDto: FindRevenuesDto): PrismaPromise<Revenues[]> {
+  listRevenues(findRevenuesDto: FilterRevenuesDto): PrismaPromise<Revenues[]> {
     const { description } = findRevenuesDto;
 
     if (description) {
@@ -29,8 +29,8 @@ export class RevenuesService {
     return this.prisma.revenues.findMany();
   }
 
-  async addRevenue(revenueData: AddRevenueDto): Promise<void> {
-    const { description, date, value } = revenueData;
+  async addRevenue(addRevenueDto: AddRevenueDto): Promise<void> {
+    const { description, date, value } = addRevenueDto;
 
     this._logger.debug(`Checking if the description is valid.`);
     const isDescriptionValid: boolean = await this._validateDescription(description, date);
@@ -80,7 +80,7 @@ export class RevenuesService {
     return revenueFound ? false : true;
   }
 
-  async listOneRevenue(id: string): Promise<Revenues> {
+  async getRevenue(id: string): Promise<Revenues> {
     this._logger.debug(`Searching for a revenue with id ${id}`);
     const revenue = await this.prisma.revenues.findUnique({
       where: { id },
@@ -94,8 +94,8 @@ export class RevenuesService {
     return revenue;
   }
 
-  async updateRevenue(id: string, revenueData: UpdateRevenueDto): Promise<void> {
-    const { description, date, value } = revenueData;
+  async updateRevenue(id: string, updateRevenueDto: UpdateRevenueDto): Promise<void> {
+    const { description, date, value } = updateRevenueDto;
 
     this._logger.debug(`Searching for a revenue with id ${id} `);
 

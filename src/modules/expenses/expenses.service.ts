@@ -4,7 +4,7 @@ import { Expenses, PrismaPromise } from '@prisma/client';
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
 import { Month } from '../../utils/enum';
-import { AddExpenseDto, FindExpensesDto, UpdateExpenseDto } from './dto';
+import { AddExpenseDto, FilterExpensesDto, UpdateExpenseDto } from './dto';
 import { Category } from './enum';
 
 @Injectable()
@@ -13,8 +13,8 @@ export class ExpensesService {
 
   constructor(private prisma: PrismaService) {}
 
-  listExpenses(findExpensesDto: FindExpensesDto): PrismaPromise<Expenses[]> {
-    const { description } = findExpensesDto;
+  listExpenses(filterExpensesDto: FilterExpensesDto): PrismaPromise<Expenses[]> {
+    const { description } = filterExpensesDto;
 
     if (description) {
       this._logger.debug('Finding all the expenses with filter');
@@ -83,7 +83,7 @@ export class ExpensesService {
     return expenseFund ? false : true;
   }
 
-  async listOneExpense(id: string): Promise<Expenses> {
+  async getExpense(id: string): Promise<Expenses> {
     this._logger.debug(`Searching for a expense with id ${id}`);
     const expense = await this.prisma.expenses.findUnique({
       where: { id },
@@ -164,7 +164,7 @@ export class ExpensesService {
     this._logger.log(`A expense with id ${id} was deleted.`);
   }
 
-  listAllExpensesByMonth(year: number, month: Month): PrismaPromise<Expenses[]> {
+  listExpensesByMonth(year: number, month: Month): PrismaPromise<Expenses[]> {
     const firstDayOfTheMonth = new Date(year, +Month[month]);
 
     const firstDayOfTheNextMonth = new Date(year, +Month[month] + 1);
