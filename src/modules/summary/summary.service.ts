@@ -1,5 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Expenses, Revenues } from '@prisma/client';
 
 import { Month } from '../../utils/enum';
 import { ExpensesService } from '../expenses/expenses.service';
@@ -16,14 +15,12 @@ export class SummaryService {
   ) {}
 
   async summaryByYearMonth(year: number, month: Month): Promise<SummaryByYearMonthRO> {
-    this._logger.debug(`Searching for the revenues on this year ${year} and month ${month}`);
+    this._logger.debug(
+      `Searching for the total revenues and total expenses from the year ${year} and the month ${month}`,
+    );
 
-    const revenues = await this.revenuesService.listRevenuesByYearMonth(year, month);
-
-    const expenses = await this.expensesService.listExpensesByYearMonth(year, month);
-
-    const totalRevenues = this._getRevenuesTotalValue(revenues);
-    const totalExpenses = this._getExpensesTotalValue(expenses);
+    const totalRevenues = await this.revenuesService.getRevenuesTotalValueByYearMonth(year, month);
+    const totalExpenses = await this.expensesService.getExpensesTotalValueByYearMonth(year, month);
 
     const balance = totalRevenues - totalExpenses;
 
@@ -32,13 +29,5 @@ export class SummaryService {
       totalExpenses,
       balance,
     };
-  }
-
-  private _getRevenuesTotalValue(revenues: Revenues[]): number {
-    return revenues.reduce((acc, curr) => acc + curr.value, 0);
-  }
-
-  private _getExpensesTotalValue(expenses: Expenses[]): number {
-    return expenses.reduce((acc, curr) => acc + curr.value, 0);
   }
 }

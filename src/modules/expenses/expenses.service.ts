@@ -164,4 +164,10 @@ export class ExpensesService {
       },
     });
   }
+
+  async getExpensesTotalValueByYearMonth(year: number, month: Month): Promise<number> {
+    const expenses = await this.listExpensesByYearMonth(year, month);
+
+    return expenses.reduce((acc, curr) => acc + curr.value, 0);
+  }
 }

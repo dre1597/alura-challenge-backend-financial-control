@@ -162,4 +162,10 @@ export class RevenuesService {
       },
     });
   }
+
+  async getRevenuesTotalValueByYearMonth(year: number, month: Month): Promise<number> {
+    const revenues = await this.listRevenuesByYearMonth(year, month);
+
+    return revenues.reduce((acc, curr) => acc + curr.value, 0);
+  }
 }
