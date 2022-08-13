@@ -3,7 +3,7 @@ import { Expenses, PrismaPromise } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
-import { AddExpenseDto, UpdateExpenseDto } from './dto';
+import { AddExpenseDto, FindExpensesDto, UpdateExpenseDto } from './dto';
 import { Category } from './enum';
 
 @Injectable()
@@ -12,8 +12,21 @@ export class ExpensesService {
 
   constructor(private prisma: PrismaService) {}
 
-  listExpenses(): PrismaPromise<Expenses[]> {
+  listExpenses(findExpensesDto: FindExpensesDto): PrismaPromise<Expenses[]> {
+    const { description } = findExpensesDto;
+
+    if (description) {
+      this._logger.debug('Finding all the expenses with filter');
+
+      return this.prisma.expenses.findMany({
+        where: {
+          description,
+        },
+      });
+    }
+
     this._logger.debug('Finding all the expenses.');
+
     return this.prisma.expenses.findMany();
   }
 

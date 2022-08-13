@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { Expenses, PrismaPromise } from '@prisma/client';
 
-import { AddExpenseDto, UpdateExpenseDto } from './dto';
+import { AddExpenseDto, FindExpensesDto, UpdateExpenseDto } from './dto';
 import { ExpensesService } from './expenses.service';
 
 @Controller('expenses')
@@ -9,8 +9,8 @@ export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Get()
-  listExpenses(): PrismaPromise<Expenses[]> {
-    return this.expensesService.listExpenses();
+  listExpenses(@Query() findExpensesDto: FindExpensesDto): PrismaPromise<Expenses[]> {
+    return this.expensesService.listExpenses(findExpensesDto);
   }
 
   @Post()
