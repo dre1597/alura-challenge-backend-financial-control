@@ -164,7 +164,7 @@ export class ExpensesService {
     this._logger.log(`A expense with id ${id} was deleted.`);
   }
 
-  listExpensesByMonth(year: number, month: Month): PrismaPromise<Expenses[]> {
+  listExpensesByYearMonth(year: number, month: Month): PrismaPromise<Expenses[]> {
     this._logger.debug(`Looking for the first day of the month ${month} on year ${year}`);
     const firstDayOfTheMonth = new Date(year, +Month[month]);
 

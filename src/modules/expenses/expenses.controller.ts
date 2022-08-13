@@ -46,10 +46,10 @@ export class ExpensesController {
   }
 
   @Get(':year/:month')
-  listExpensesByMonth(
+  listExpensesByYearMonth(
     @Param('year', ParseIntPipe) year: number,
     @Param('month', new ParseEnumPipe(Month)) month: Month,
   ): PrismaPromise<Expenses[]> {
-    return this.expensesService.listExpensesByMonth(year, month);
+    return this.expensesService.listExpensesByYearMonth(year, month);
   }
 }
