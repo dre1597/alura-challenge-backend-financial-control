@@ -1,9 +1,9 @@
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaPromise, Revenues } from '@prisma/client';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../utils';
-import { AddRevenueDto } from './dto';
+import { AddRevenueDto, UpdateRevenueDto } from './dto';
 
 @Injectable()
 export class RevenuesService {
@@ -69,10 +69,55 @@ export class RevenuesService {
     return dateFound ? false : true;
   }
 
-  listOneRevenue(id: string): PrismaPromise<Revenues> {
+  async listOneRevenue(id: string): Promise<Revenues> {
     this._logger.debug(`Searching for a revenue with id ${id} `);
-    return this.prisma.revenues.findUnique({
+    const revenue = await this.prisma.revenues.findUnique({
       where: { id },
+    });
+
+    if (!revenue) {
+      this._logger.error(`Revenue ${id} not found.`);
+      throw new NotFoundException('Revenue not found.');
+    }
+
+    return revenue;
+  }
+
+  async updateRevenue(id: string, revenueData: UpdateRevenueDto): Promise<Revenues> {
+    const { description, date, value } = revenueData;
+
+    this._logger.debug(`Searching for a revenue with id ${id} `);
+
+    const revenueFound = await this.prisma.revenues.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!revenueFound) {
+      this._logger.error(`Revenue ${id} not found.`);
+      throw new NotFoundException('Revenue not found.');
+    }
+
+    if (description && description !== revenueFound.description) {
+      this._logger.debug(`Checking if the description is valid.`);
+      const isDescriptionValid: boolean = await this._validateDescription(description, date);
+
+      if (!isDescriptionValid) {
+        this._logger.error(`Invalid description.`);
+        throw new ForbiddenException('Invalid description.');
+      }
+    }
+
+    return this.prisma.revenues.update({
+      where: {
+        id,
+      },
+      data: {
+        description,
+        value,
+        date,
+      },
     });
   }
 }

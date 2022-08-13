@@ -1,7 +1,7 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { PrismaPromise, Revenues } from '@prisma/client';
 
-import { AddRevenueDto } from './dto';
+import { AddRevenueDto, UpdateRevenueDto } from './dto';
 import { FindOneParams } from './params';
 import { RevenuesService } from './revenues.service';
 
@@ -20,9 +20,14 @@ export class RevenuesController {
   }
 
   @Get(':id')
-  listOneRevenue(@Param() params: FindOneParams): PrismaPromise<Revenues> {
+  listOneRevenue(@Param() params: FindOneParams): Promise<Revenues> {
     const { id } = params;
 
     return this.revenuesService.listOneRevenue(id);
+  }
+
+  @Patch(':id')
+  updateRevenue(@Param('id') id: string, @Body() revenueData: UpdateRevenueDto): Promise<Revenues> {
+    return this.revenuesService.updateRevenue(id, revenueData);
   }
 }
