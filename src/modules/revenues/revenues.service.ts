@@ -100,16 +100,7 @@ export class RevenuesService {
 
     this._logger.debug(`Searching for a revenue with id ${id} `);
 
-    const revenueFound = await this.prismaService.revenues.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!revenueFound) {
-      this._logger.error(`Revenue ${id} not found.`);
-      throw new NotFoundException('Revenue not found.');
-    }
+    const revenueFound = await this.getRevenue(id);
 
     if (description && description !== revenueFound.description) {
       this._logger.debug(`Checking if the description is valid.`);
@@ -140,16 +131,7 @@ export class RevenuesService {
   async deleteRevenue(id: string): Promise<void> {
     this._logger.debug(`Searching for a revenue with id ${id} `);
 
-    const revenueFound = await this.prismaService.revenues.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!revenueFound) {
-      this._logger.error(`Revenue ${id} not found.`);
-      throw new NotFoundException('Revenue not found.');
-    }
+    await this.getRevenue(id);
 
     this._logger.debug(`Deleting a revenue with id ${id}`);
 

@@ -102,16 +102,7 @@ export class ExpensesService {
 
     this._logger.debug(`Searching for a expense with id ${id} `);
 
-    const expenseFound = await this.prismaService.expenses.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!expenseFound) {
-      this._logger.error(`Expense ${id} not found.`);
-      throw new NotFoundException('Expense not found.');
-    }
+    const expenseFound = await this.getExpense(id);
 
     if (description && description !== expenseFound.description) {
       this._logger.debug(`Checking if the description is valid.`);
@@ -142,16 +133,7 @@ export class ExpensesService {
   async deleteExpense(id: string): Promise<void> {
     this._logger.debug(`Searching for a expense with id ${id} `);
 
-    const expenseFound = await this.prismaService.expenses.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    if (!expenseFound) {
-      this._logger.error(`Expense ${id} not found.`);
-      throw new NotFoundException('Expense not found.');
-    }
+    await this.getExpense(id);
 
     this._logger.debug(`Deleting a expense with id ${id}`);
 
