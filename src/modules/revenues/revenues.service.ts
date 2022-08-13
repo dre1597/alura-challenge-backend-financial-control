@@ -3,7 +3,7 @@ import { PrismaPromise, Revenues } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
-import { AddRevenueDto, UpdateRevenueDto } from './dto';
+import { AddRevenueDto, FindRevenuesDto, UpdateRevenueDto } from './dto';
 
 @Injectable()
 export class RevenuesService {
@@ -11,8 +11,21 @@ export class RevenuesService {
 
   constructor(private prisma: PrismaService) {}
 
-  listRevenues(): PrismaPromise<Revenues[]> {
+  listRevenues(findRevenuesDto: FindRevenuesDto): PrismaPromise<Revenues[]> {
+    const { description } = findRevenuesDto;
+
+    if (description) {
+      this._logger.debug('Finding all the revenues with filter');
+
+      return this.prisma.revenues.findMany({
+        where: {
+          description,
+        },
+      });
+    }
+
     this._logger.debug('Finding all the revenues.');
+
     return this.prisma.revenues.findMany();
   }
 
