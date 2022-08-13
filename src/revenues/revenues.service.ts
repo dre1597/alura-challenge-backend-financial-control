@@ -120,4 +120,27 @@ export class RevenuesService {
 
     this._logger.log(`A revenue with id ${id} was updated.`);
   }
+
+  async deleteRevenue(id: string): Promise<void> {
+    this._logger.debug(`Searching for a revenue with id ${id} `);
+
+    const revenueFound = await this.prisma.revenues.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!revenueFound) {
+      this._logger.error(`Revenue ${id} not found.`);
+      throw new NotFoundException('Revenue not found.');
+    }
+
+    await this.prisma.revenues.delete({
+      where: {
+        id,
+      },
+    });
+
+    this._logger.log(`A revenue with id ${id} was deleted.`);
+  }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { PrismaPromise, Revenues } from '@prisma/client';
 
 import { AddRevenueDto, UpdateRevenueDto } from './dto';
@@ -26,5 +26,10 @@ export class RevenuesController {
   @Patch(':id')
   updateRevenue(@Param('id') id: string, @Body() revenueData: UpdateRevenueDto): Promise<void> {
     return this.revenuesService.updateRevenue(id, revenueData);
+  }
+
+  @Delete(':id')
+  deleteRevenue(@Param('id') id: string): Promise<void> {
+    return this.revenuesService.deleteRevenue(id);
   }
 }
