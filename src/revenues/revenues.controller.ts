@@ -2,7 +2,6 @@ import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { PrismaPromise, Revenues } from '@prisma/client';
 
 import { AddRevenueDto, UpdateRevenueDto } from './dto';
-import { FindOneParams } from './params';
 import { RevenuesService } from './revenues.service';
 
 @Controller('revenues')
@@ -20,9 +19,7 @@ export class RevenuesController {
   }
 
   @Get(':id')
-  listOneRevenue(@Param() params: FindOneParams): Promise<Revenues> {
-    const { id } = params;
-
+  listOneRevenue(@Param('id') id: string): Promise<Revenues> {
     return this.revenuesService.listOneRevenue(id);
   }
 
