@@ -10,7 +10,7 @@ import { AddRevenueDto, FilterRevenuesDto, UpdateRevenueDto } from './dto';
 export class RevenuesService {
   private _logger: Logger = new Logger('RevenuesService');
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   listRevenues(findRevenuesDto: FilterRevenuesDto): PrismaPromise<Revenues[]> {
     const { description } = findRevenuesDto;
@@ -18,7 +18,7 @@ export class RevenuesService {
     if (description) {
       this._logger.debug('Finding all the revenues with filter');
 
-      return this.prisma.revenues.findMany({
+      return this.prismaService.revenues.findMany({
         where: {
           description,
         },
@@ -27,7 +27,7 @@ export class RevenuesService {
 
     this._logger.debug('Finding all the revenues.');
 
-    return this.prisma.revenues.findMany();
+    return this.prismaService.revenues.findMany();
   }
 
   async addRevenue(addRevenueDto: AddRevenueDto): Promise<void> {
@@ -42,7 +42,7 @@ export class RevenuesService {
     }
 
     this._logger.debug('Adding a new revenue.');
-    const revenue = await this.prisma.revenues.create({
+    const revenue = await this.prismaService.revenues.create({
       data: {
         description,
         value,
@@ -68,7 +68,7 @@ export class RevenuesService {
     const firstDayOfTheMonth = getFirstDayOfMonth(date);
     const lastDayOfTheMonth = getLastDayOfMonth(date);
 
-    const revenueFound = await this.prisma.revenues.findFirst({
+    const revenueFound = await this.prismaService.revenues.findFirst({
       where: {
         description,
         date: {
@@ -83,7 +83,7 @@ export class RevenuesService {
 
   async getRevenue(id: string): Promise<Revenues> {
     this._logger.debug(`Searching for a revenue with id ${id}`);
-    const revenue = await this.prisma.revenues.findUnique({
+    const revenue = await this.prismaService.revenues.findUnique({
       where: { id },
     });
 
@@ -100,7 +100,7 @@ export class RevenuesService {
 
     this._logger.debug(`Searching for a revenue with id ${id} `);
 
-    const revenueFound = await this.prisma.revenues.findUnique({
+    const revenueFound = await this.prismaService.revenues.findUnique({
       where: {
         id,
       },
@@ -123,7 +123,7 @@ export class RevenuesService {
 
     this._logger.debug(`Updating a revenue with id ${id}`);
 
-    await this.prisma.revenues.update({
+    await this.prismaService.revenues.update({
       where: {
         id,
       },
@@ -140,7 +140,7 @@ export class RevenuesService {
   async deleteRevenue(id: string): Promise<void> {
     this._logger.debug(`Searching for a revenue with id ${id} `);
 
-    const revenueFound = await this.prisma.revenues.findUnique({
+    const revenueFound = await this.prismaService.revenues.findUnique({
       where: {
         id,
       },
@@ -153,7 +153,7 @@ export class RevenuesService {
 
     this._logger.debug(`Deleting a revenue with id ${id}`);
 
-    await this.prisma.revenues.delete({
+    await this.prismaService.revenues.delete({
       where: {
         id,
       },
@@ -171,7 +171,7 @@ export class RevenuesService {
 
     this._logger.debug(`Searching for the revenues on this year ${year} and month ${month}`);
 
-    return this.prisma.revenues.findMany({
+    return this.prismaService.revenues.findMany({
       where: {
         date: {
           lte: firstDayOfTheNextMonth,

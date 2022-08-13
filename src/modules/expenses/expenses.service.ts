@@ -11,7 +11,7 @@ import { Category } from './enum';
 export class ExpensesService {
   private _logger: Logger = new Logger('ExpensesService');
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   listExpenses(filterExpensesDto: FilterExpensesDto): PrismaPromise<Expenses[]> {
     const { description } = filterExpensesDto;
@@ -19,7 +19,7 @@ export class ExpensesService {
     if (description) {
       this._logger.debug('Finding all the expenses with filter');
 
-      return this.prisma.expenses.findMany({
+      return this.prismaService.expenses.findMany({
         where: {
           description,
         },
@@ -28,7 +28,7 @@ export class ExpensesService {
 
     this._logger.debug('Finding all the expenses.');
 
-    return this.prisma.expenses.findMany();
+    return this.prismaService.expenses.findMany();
   }
 
   async addExpense(expenseData: AddExpenseDto): Promise<void> {
@@ -43,7 +43,7 @@ export class ExpensesService {
     }
 
     this._logger.debug('Adding a new expense.');
-    const expense = await this.prisma.expenses.create({
+    const expense = await this.prismaService.expenses.create({
       data: {
         description,
         value,
@@ -70,7 +70,7 @@ export class ExpensesService {
     const firstDayOfTheMonth = getFirstDayOfMonth(date);
     const lastDayOfTheMonth = getLastDayOfMonth(date);
 
-    const expenseFund = await this.prisma.expenses.findFirst({
+    const expenseFund = await this.prismaService.expenses.findFirst({
       where: {
         description,
         date: {
@@ -85,7 +85,7 @@ export class ExpensesService {
 
   async getExpense(id: string): Promise<Expenses> {
     this._logger.debug(`Searching for a expense with id ${id}`);
-    const expense = await this.prisma.expenses.findUnique({
+    const expense = await this.prismaService.expenses.findUnique({
       where: { id },
     });
 
@@ -102,7 +102,7 @@ export class ExpensesService {
 
     this._logger.debug(`Searching for a expense with id ${id} `);
 
-    const expenseFound = await this.prisma.expenses.findUnique({
+    const expenseFound = await this.prismaService.expenses.findUnique({
       where: {
         id,
       },
@@ -125,7 +125,7 @@ export class ExpensesService {
 
     this._logger.debug(`Updating a expense with id ${id}`);
 
-    await this.prisma.expenses.update({
+    await this.prismaService.expenses.update({
       where: {
         id,
       },
@@ -142,7 +142,7 @@ export class ExpensesService {
   async deleteExpense(id: string): Promise<void> {
     this._logger.debug(`Searching for a expense with id ${id} `);
 
-    const expenseFound = await this.prisma.expenses.findUnique({
+    const expenseFound = await this.prismaService.expenses.findUnique({
       where: {
         id,
       },
@@ -155,7 +155,7 @@ export class ExpensesService {
 
     this._logger.debug(`Deleting a expense with id ${id}`);
 
-    await this.prisma.expenses.delete({
+    await this.prismaService.expenses.delete({
       where: {
         id,
       },
@@ -173,7 +173,7 @@ export class ExpensesService {
 
     this._logger.debug(`Searching for the expenses on this year ${year} and month ${month}`);
 
-    return this.prisma.expenses.findMany({
+    return this.prismaService.expenses.findMany({
       where: {
         date: {
           lte: firstDayOfTheNextMonth,
