@@ -165,9 +165,13 @@ export class ExpensesService {
   }
 
   listExpensesByMonth(year: number, month: Month): PrismaPromise<Expenses[]> {
+    this._logger.debug(`Looking for the first day of the month ${month} on year ${year}`);
     const firstDayOfTheMonth = new Date(year, +Month[month]);
 
+    this._logger.debug(`Looking for the first day of the next month of ${month} on year ${year}`);
     const firstDayOfTheNextMonth = new Date(year, +Month[month] + 1);
+
+    this._logger.debug(`Searching for the expenses on this year ${year} and month ${month}`);
 
     return this.prisma.expenses.findMany({
       where: {
