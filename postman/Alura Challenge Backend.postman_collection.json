@@ -1,0 +1,295 @@
+{
+	"info": {
+		"_postman_id": "90045401-d477-4c29-aab7-f3a6449e9155",
+		"name": "Alura Challenge Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14124152"
+	},
+	"item": [
+		{
+			"name": "Revenues",
+			"item": [
+				{
+					"name": "List all revenues",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/revenues",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"revenues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Revenue",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Good description\",\n  \"value\": 10,\n  \"date\": \"{{$randomDateRecent}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/revenues",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"revenues"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List one revenue",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/revenues/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"revenues",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2868cd5b-a2cb-4cc0-9f94-0d8f51d479ec"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Revenue",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"other description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/revenues/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"revenues",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2868cd5b-a2cb-4cc0-9f94-0d8f51d479ec"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete revenue",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/revenues/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"revenues",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "62c1d3bf-35fe-47eb-b117-9fa3ca81202a"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Expenses",
+			"item": [
+				{
+					"name": "List all expenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/expenses",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"expenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add expense",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"to delete description\",\n  \"value\": 10,\n  \"date\": \"{{$randomDateRecent}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/expenses",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"expenses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List one expense",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/expenses/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"expenses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "dd9723a3-a00f-45a9-8e6e-9564c85e7b05"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update expense",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"other description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/expenses/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"expenses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2868cd5b-a2cb-4cc0-9f94-0d8f51d479ec"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete expense",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/expenses/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"expenses",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "dd9723a3-a00f-45a9-8e6e-9564c85e7b05"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
