@@ -9,7 +9,7 @@ export class ExpensesController {
   constructor(private readonly expensesService: ExpensesService) {}
 
   @Get()
-  listRevenues(): PrismaPromise<Expenses[]> {
+  listExpenses(): PrismaPromise<Expenses[]> {
     return this.expensesService.listExpenses();
   }
 
