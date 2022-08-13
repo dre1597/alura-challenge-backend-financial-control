@@ -7,5 +7,6 @@ import { RevenuesService } from './revenues.service';
   imports: [],
   controllers: [RevenuesController],
   providers: [RevenuesService],
+  exports: [RevenuesService],
 })
 export class RevenuesModule {}
