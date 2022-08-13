@@ -3,6 +3,7 @@ import { PrismaPromise, Revenues } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
+import { Month } from '../../utils/enum';
 import { AddRevenueDto, FilterRevenuesDto, UpdateRevenueDto } from './dto';
 
 @Injectable()
@@ -159,5 +160,24 @@ export class RevenuesService {
     });
 
     this._logger.log(`A revenue with id ${id} was deleted.`);
+  }
+
+  listRevenuesByYearMonth(year: number, month: Month): PrismaPromise<Revenues[]> {
+    this._logger.debug(`Looking for the first day of the month ${month} on year ${year}`);
+    const firstDayOfTheMonth = new Date(year, +Month[month]);
+
+    this._logger.debug(`Looking for the first day of the next month of ${month} on year ${year}`);
+    const firstDayOfTheNextMonth = new Date(year, +Month[month] + 1);
+
+    this._logger.debug(`Searching for the revenues on this year ${year} and month ${month}`);
+
+    return this.prisma.revenues.findMany({
+      where: {
+        date: {
+          lte: firstDayOfTheNextMonth,
+          gte: firstDayOfTheMonth,
+        },
+      },
+    });
   }
 }
