@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { Expenses, PrismaPromise } from '@prisma/client';
 
 import { PrismaService } from '../../orm/prisma/prisma.service';
 import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../utils';
@@ -9,6 +10,11 @@ export class ExpensesService {
   private _logger: Logger = new Logger('ExpensesService');
 
   constructor(private prisma: PrismaService) {}
+
+  listExpenses(): PrismaPromise<Expenses[]> {
+    this._logger.debug('Finding all the expenses.');
+    return this.prisma.expenses.findMany();
+  }
 
   async addExpense(expenseData: AddExpenseDto) {
     const { description, date, value } = expenseData;
