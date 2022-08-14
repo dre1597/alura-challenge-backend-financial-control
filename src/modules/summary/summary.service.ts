@@ -24,10 +24,16 @@ export class SummaryService {
 
     const balance = totalRevenues - totalExpenses;
 
+    const totalExpensesByCategory = await this.expensesService.getTotalExpensesSummaryByCategory(
+      year,
+      month,
+    );
+
     return {
       totalRevenues,
       totalExpenses,
       balance,
+      totalExpensesByCategory,
     };
   }
 }

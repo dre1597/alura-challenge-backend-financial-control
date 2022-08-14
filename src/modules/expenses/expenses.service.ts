@@ -6,6 +6,7 @@ import { getDateStringNow, getFirstDayOfMonth, getLastDayOfMonth } from '../../u
 import { Month } from '../../utils/enum';
 import { AddExpenseDto, FilterExpensesDto, UpdateExpenseDto } from './dto';
 import { Category } from './enum';
+import { MappedTotalExpensesByCategory, TotalExpensesByCategory } from './type';
 
 @Injectable()
 export class ExpensesService {
@@ -169,5 +170,34 @@ export class ExpensesService {
     const expenses = await this.listExpensesByYearMonth(year, month);
 
     return expenses.reduce((acc, curr) => acc + curr.value, 0);
+  }
+
+  async getTotalExpensesSummaryByCategory(
+    year: number,
+    month: Month,
+  ): Promise<MappedTotalExpensesByCategory> {
+    const categories = Object.values(Category);
+
+    const expenses = await this.listExpensesByYearMonth(year, month);
+
+    const summary = categories.map((category) => {
+      return {
+        [category]: expenses
+          .filter((expense) => expense.category === category)
+          .reduce((acc, curr) => acc + curr.value, 0),
+      };
+    });
+
+    return this._formatSummary(summary);
+  }
+
+  private _formatSummary(summary: TotalExpensesByCategory): MappedTotalExpensesByCategory {
+    const summaryFormatted = {} as MappedTotalExpensesByCategory;
+
+    for (const elem of summary) {
+      summaryFormatted[Object.keys(elem)[0]] = Object.values(elem)[0];
+    }
+
+    return summaryFormatted;
   }
 }
