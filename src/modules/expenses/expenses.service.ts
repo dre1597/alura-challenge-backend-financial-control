@@ -56,34 +56,6 @@ export class ExpensesService {
     this._logger.log(`A expense with id ${expense.id} was added.`);
   }
 
-  private async _validateDescription(description: string, date: string): Promise<boolean> {
-    if (!date) {
-      date = getDateStringNow();
-    }
-
-    return this._findIfDescriptionIsUniqueOnTheMonth(description, date);
-  }
-
-  private async _findIfDescriptionIsUniqueOnTheMonth(
-    description: string,
-    date: string,
-  ): Promise<boolean> {
-    const firstDayOfTheMonth = getFirstDayOfMonth(date);
-    const lastDayOfTheMonth = getLastDayOfMonth(date);
-
-    const expenseFund = await this.prismaService.expenses.findFirst({
-      where: {
-        description,
-        date: {
-          lte: lastDayOfTheMonth,
-          gte: firstDayOfTheMonth,
-        },
-      },
-    });
-
-    return expenseFund ? false : true;
-  }
-
   async getExpense(id: string): Promise<Expenses> {
     this._logger.debug(`Searching for a expense with id ${id}`);
     const expense = await this.prismaService.expenses.findUnique({
@@ -189,6 +161,34 @@ export class ExpensesService {
     });
 
     return this._formatSummary(summary);
+  }
+
+  private async _validateDescription(description: string, date: string): Promise<boolean> {
+    if (!date) {
+      date = getDateStringNow();
+    }
+
+    return this._findIfDescriptionIsUniqueOnTheMonth(description, date);
+  }
+
+  private async _findIfDescriptionIsUniqueOnTheMonth(
+    description: string,
+    date: string,
+  ): Promise<boolean> {
+    const firstDayOfTheMonth = getFirstDayOfMonth(date);
+    const lastDayOfTheMonth = getLastDayOfMonth(date);
+
+    const expenseFund = await this.prismaService.expenses.findFirst({
+      where: {
+        description,
+        date: {
+          lte: lastDayOfTheMonth,
+          gte: firstDayOfTheMonth,
+        },
+      },
+    });
+
+    return !expenseFund;
   }
 
   private _formatSummary(summary: TotalExpensesByCategory): MappedTotalExpensesByCategory {

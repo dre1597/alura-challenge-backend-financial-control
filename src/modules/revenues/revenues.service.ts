@@ -53,34 +53,6 @@ export class RevenuesService {
     this._logger.log(`A revenue with id ${revenue.id} was added.`);
   }
 
-  private async _validateDescription(description: string, date: string): Promise<boolean> {
-    if (!date) {
-      date = getDateStringNow();
-    }
-
-    return this._findIfDescriptionIsUniqueOnTheMonth(description, date);
-  }
-
-  private async _findIfDescriptionIsUniqueOnTheMonth(
-    description: string,
-    date: string,
-  ): Promise<boolean> {
-    const firstDayOfTheMonth = getFirstDayOfMonth(date);
-    const lastDayOfTheMonth = getLastDayOfMonth(date);
-
-    const revenueFound = await this.prismaService.revenues.findFirst({
-      where: {
-        description,
-        date: {
-          lte: lastDayOfTheMonth,
-          gte: firstDayOfTheMonth,
-        },
-      },
-    });
-
-    return revenueFound ? false : true;
-  }
-
   async getRevenue(id: string): Promise<Revenues> {
     this._logger.debug(`Searching for a revenue with id ${id}`);
     const revenue = await this.prismaService.revenues.findUnique({
@@ -167,5 +139,33 @@ export class RevenuesService {
     const revenues = await this.listRevenuesByYearMonth(year, month);
 
     return revenues.reduce((acc, curr) => acc + curr.value, 0);
+  }
+
+  private async _validateDescription(description: string, date: string): Promise<boolean> {
+    if (!date) {
+      date = getDateStringNow();
+    }
+
+    return this._findIfDescriptionIsUniqueOnTheMonth(description, date);
+  }
+
+  private async _findIfDescriptionIsUniqueOnTheMonth(
+    description: string,
+    date: string,
+  ): Promise<boolean> {
+    const firstDayOfTheMonth = getFirstDayOfMonth(date);
+    const lastDayOfTheMonth = getLastDayOfMonth(date);
+
+    const revenueFound = await this.prismaService.revenues.findFirst({
+      where: {
+        description,
+        date: {
+          lte: lastDayOfTheMonth,
+          gte: firstDayOfTheMonth,
+        },
+      },
+    });
+
+    return !revenueFound;
   }
 }
